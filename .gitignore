@@ -1,0 +1,11 @@
+.vscode
+
+__pycache__/
+*.py[cod]
+
+.python-version
+
+*.egg-info
+
+build/
+dist/
