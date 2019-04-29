@@ -1,4 +1,5 @@
 import importlib
+import importlib.util
 
 from d3dshot.d3dshot import D3DShot
 from d3dshot.capture_output import CaptureOutputs
