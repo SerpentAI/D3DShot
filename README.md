@@ -88,8 +88,8 @@ This is barely scratching the surface... Keep reading!
 
 ## Requirements
 
-* Windows 8.1+
-* Python 3.6+
+* Windows 8.1+ (64-bit)
+* Python 3.6+ (64-bit)
 
 ## Installation
 
