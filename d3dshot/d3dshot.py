@@ -1,6 +1,7 @@
 import threading
 import collections
 
+import gc
 import os
 import time
 
@@ -35,6 +36,8 @@ class D3DShot:
         self.frame_buffer = collections.deque(list(), self.frame_buffer_size)
         
         self.previous_screenshot = None
+
+        self.region = None
 
         self._pil_is_available = pil_is_available
         self._numpy_is_available = numpy_is_available
@@ -198,6 +201,8 @@ class D3DShot:
         self.frame_buffer = collections.deque(list(), self.frame_buffer_size)
 
     def _validate_region(self, region):
+        region = region or self.region or None
+
         if region is None:
             return None
 
@@ -281,6 +286,8 @@ class D3DShot:
             else:
                 if len(self.frame_buffer):
                     self.frame_buffer.appendleft(self.frame_buffer[0])
+     
+            gc.collect()
 
             cycle_end = time.time()
 
@@ -290,6 +297,7 @@ class D3DShot:
                 time.sleep(frame_time_left)
 
         self._is_capturing = False
+    
 
     def _screenshot_every(self, interval, region):
         self._reset_frame_buffer()

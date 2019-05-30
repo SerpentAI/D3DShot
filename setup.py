@@ -21,7 +21,7 @@ requires = [
 
 setup(
     name="D3DShot",
-    version="0.1.0",
+    version="0.1.2",
     description="Extremely Fast and Robust Screen Capture on Windows with the Desktop Duplication API",
     long_description=README,
     long_description_content_type="text/markdown",
