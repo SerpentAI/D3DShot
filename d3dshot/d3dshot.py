@@ -122,7 +122,6 @@ class D3DShot:
 
     def capture(self, target_fps=60, region=None):
         target_fps = self._validate_target_fps(target_fps)
-        region = self._validate_region(region)
 
         if self.is_capturing:
             return False
@@ -279,7 +278,10 @@ class D3DShot:
         while self.is_capturing:
             cycle_start = time.time()
 
-            frame = self.display.capture(self.capture_output.process, region=region)
+            frame = self.display.capture(
+                self.capture_output.process, 
+                region=self._validate_region(region)
+            )
        
             if frame is not None:
                 self.frame_buffer.appendleft(frame)
@@ -305,7 +307,7 @@ class D3DShot:
         while self.is_capturing:
             cycle_start = time.time()
 
-            frame = self.screenshot(region=region)
+            frame = self.screenshot(region=self._validate_region(region))
             self.frame_buffer.appendleft(frame)
        
             cycle_end = time.time()
@@ -321,7 +323,7 @@ class D3DShot:
         while self.is_capturing:
             cycle_start = time.time()
 
-            self.screenshot_to_disk(directory=directory, region=region)
+            self.screenshot_to_disk(directory=directory, region=self._validate_region(region))
        
             cycle_end = time.time()
 
