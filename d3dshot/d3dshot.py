@@ -23,7 +23,8 @@ class D3DShot:
         self.displays = None
         self.detect_displays()
 
-        self.display = None
+        # default to the first display in case there are no primaries
+        self.display = self.displays[0] if len(self.displays) > 0 else None 
 
         for display in self.displays:
             if display.is_primary:
