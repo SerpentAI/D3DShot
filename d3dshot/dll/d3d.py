@@ -1,6 +1,6 @@
 import ctypes
 import ctypes.wintypes as wintypes
- 
+
 import comtypes
 
 
@@ -105,8 +105,25 @@ class ID3D11DeviceContext(ID3D11DeviceChild):
         comtypes.STDMETHOD(None, "RSSetState"),
         comtypes.STDMETHOD(None, "RSSetViewports"),
         comtypes.STDMETHOD(None, "RSSetScissorRects"),
-        comtypes.STDMETHOD(None, "CopySubresourceRegion", [ctypes.POINTER(ID3D11Resource), wintypes.UINT, wintypes.UINT, wintypes.UINT, wintypes.UINT, ctypes.POINTER(ID3D11Resource), wintypes.UINT, ctypes.POINTER(D3D11_BOX)]),
-        comtypes.STDMETHOD(None, "CopyResource", [ctypes.POINTER(ID3D11Resource), ctypes.POINTER(ID3D11Resource)]),
+        comtypes.STDMETHOD(
+            None,
+            "CopySubresourceRegion",
+            [
+                ctypes.POINTER(ID3D11Resource),
+                wintypes.UINT,
+                wintypes.UINT,
+                wintypes.UINT,
+                wintypes.UINT,
+                ctypes.POINTER(ID3D11Resource),
+                wintypes.UINT,
+                ctypes.POINTER(D3D11_BOX),
+            ],
+        ),
+        comtypes.STDMETHOD(
+            None,
+            "CopyResource",
+            [ctypes.POINTER(ID3D11Resource), ctypes.POINTER(ID3D11Resource)],
+        ),
         comtypes.STDMETHOD(None, "UpdateSubresource"),
         comtypes.STDMETHOD(None, "CopyStructureCount"),
         comtypes.STDMETHOD(None, "ClearRenderTargetView"),
@@ -182,7 +199,15 @@ class ID3D11Device(comtypes.IUnknown):
     _methods_ = [
         comtypes.STDMETHOD(comtypes.HRESULT, "CreateBuffer"),
         comtypes.STDMETHOD(comtypes.HRESULT, "CreateTexture1D"),
-        comtypes.STDMETHOD(comtypes.HRESULT, "CreateTexture2D", [ctypes.POINTER(D3D11_TEXTURE2D_DESC), ctypes.POINTER(None), ctypes.POINTER(ctypes.POINTER(ID3D11Texture2D))]),
+        comtypes.STDMETHOD(
+            comtypes.HRESULT,
+            "CreateTexture2D",
+            [
+                ctypes.POINTER(D3D11_TEXTURE2D_DESC),
+                ctypes.POINTER(None),
+                ctypes.POINTER(ctypes.POINTER(ID3D11Texture2D)),
+            ],
+        ),
         comtypes.STDMETHOD(comtypes.HRESULT, "CreateTexture3D"),
         comtypes.STDMETHOD(comtypes.HRESULT, "CreateShaderResourceView"),
         comtypes.STDMETHOD(comtypes.HRESULT, "CreateUnorderedAccessView"),
@@ -217,9 +242,13 @@ class ID3D11Device(comtypes.IUnknown):
         comtypes.STDMETHOD(ctypes.c_int32, "GetFeatureLevel"),
         comtypes.STDMETHOD(ctypes.c_uint, "GetCreationFlags"),
         comtypes.STDMETHOD(comtypes.HRESULT, "GetDeviceRemovedReason"),
-        comtypes.STDMETHOD(None, "GetImmediateContext", [ctypes.POINTER(ctypes.POINTER(ID3D11DeviceContext))]),
+        comtypes.STDMETHOD(
+            None,
+            "GetImmediateContext",
+            [ctypes.POINTER(ctypes.POINTER(ID3D11DeviceContext))],
+        ),
         comtypes.STDMETHOD(comtypes.HRESULT, "SetExceptionMode"),
-        comtypes.STDMETHOD(ctypes.c_uint, "GetExceptionMode")
+        comtypes.STDMETHOD(ctypes.c_uint, "GetExceptionMode"),
     ]
 
 
@@ -241,7 +270,7 @@ def initialize_d3d_device(dxgi_adapter):
         7,
         ctypes.byref(d3d_device),
         None,
-        ctypes.byref(d3d_device_context)
+        ctypes.byref(d3d_device_context),
     )
 
     return d3d_device, d3d_device_context
@@ -272,6 +301,10 @@ def prepare_d3d11_texture_2d_for_cpu(d3d11_texture_2d, d3d_device):
     d3d11_texture_2d_description_cpu.MiscFlags = 0
 
     d3d11_texture_2d_cpu = ctypes.POINTER(ID3D11Texture2D)()
-    d3d_device.CreateTexture2D(ctypes.byref(d3d11_texture_2d_description_cpu), None, ctypes.byref(d3d11_texture_2d_cpu))
+    d3d_device.CreateTexture2D(
+        ctypes.byref(d3d11_texture_2d_description_cpu),
+        None,
+        ctypes.byref(d3d11_texture_2d_cpu),
+    )
 
     return d3d11_texture_2d_cpu

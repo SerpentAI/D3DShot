@@ -16,7 +16,6 @@ class CaptureOutputError(BaseException):
 
 
 class CaptureOutput:
-
     def __init__(self, backend=CaptureOutputs.PIL):
         self.backend = self._initialize_backend(backend)
 
@@ -32,24 +31,41 @@ class CaptureOutput:
     def _initialize_backend(self, backend):
         if backend == CaptureOutputs.PIL:
             from d3dshot.capture_outputs.pil_capture_output import PILCaptureOutput
+
             return PILCaptureOutput()
         elif backend == CaptureOutputs.NUMPY:
             from d3dshot.capture_outputs.numpy_capture_output import NumpyCaptureOutput
+
             return NumpyCaptureOutput()
         elif backend == CaptureOutputs.NUMPY_FLOAT:
-            from d3dshot.capture_outputs.numpy_float_capture_output import NumpyFloatCaptureOutput
+            from d3dshot.capture_outputs.numpy_float_capture_output import (
+                NumpyFloatCaptureOutput,
+            )
+
             return NumpyFloatCaptureOutput()
         elif backend == CaptureOutputs.PYTORCH:
-            from d3dshot.capture_outputs.pytorch_capture_output import PytorchCaptureOutput
+            from d3dshot.capture_outputs.pytorch_capture_output import (
+                PytorchCaptureOutput,
+            )
+
             return PytorchCaptureOutput()
         elif backend == CaptureOutputs.PYTORCH_FLOAT:
-            from d3dshot.capture_outputs.pytorch_float_capture_output import PytorchFloatCaptureOutput
+            from d3dshot.capture_outputs.pytorch_float_capture_output import (
+                PytorchFloatCaptureOutput,
+            )
+
             return PytorchFloatCaptureOutput()
         elif backend == CaptureOutputs.PYTORCH_GPU:
-            from d3dshot.capture_outputs.pytorch_gpu_capture_output import PytorchGPUCaptureOutput
+            from d3dshot.capture_outputs.pytorch_gpu_capture_output import (
+                PytorchGPUCaptureOutput,
+            )
+
             return PytorchGPUCaptureOutput()
         elif backend == CaptureOutputs.PYTORCH_FLOAT_GPU:
-            from d3dshot.capture_outputs.pytorch_float_gpu_capture_output import PytorchFloatGPUCaptureOutput
+            from d3dshot.capture_outputs.pytorch_float_gpu_capture_output import (
+                PytorchFloatGPUCaptureOutput,
+            )
+
             return PytorchFloatGPUCaptureOutput()
         else:
             raise CaptureOutputError("The specified backend is invalid!")

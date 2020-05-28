@@ -10,7 +10,6 @@ from d3dshot.capture_output import CaptureOutput, CaptureOutputs
 
 
 class D3DShot:
-
     def __init__(
         self,
         capture_output=CaptureOutputs.PIL,
@@ -23,7 +22,7 @@ class D3DShot:
         self.displays = None
         self.detect_displays()
 
-        self.display = self.displays[0] if len(self.displays) > 0 else None 
+        self.display = self.displays[0] if len(self.displays) > 0 else None
 
         for display in self.displays:
             if display.is_primary:
@@ -34,7 +33,7 @@ class D3DShot:
 
         self.frame_buffer_size = frame_buffer_size
         self.frame_buffer = collections.deque(list(), self.frame_buffer_size)
-        
+
         self.previous_screenshot = None
 
         self.region = None
@@ -68,7 +67,7 @@ class D3DShot:
 
             if frame is not None:
                 frames.append(frame)
-        
+
         return frames
 
     def get_frame_stack(self, frame_indices, stack_dimension=None):
@@ -97,7 +96,7 @@ class D3DShot:
                 if frame is not None:
                     self.previous_screenshot = frame
                     return frame
-            
+
             return self.previous_screenshot
 
     def screenshot_to_disk(self, directory=None, file_name=None, region=None):
@@ -107,8 +106,8 @@ class D3DShot:
         file_path = f"{directory}/{file_name}"
 
         frame = self.screenshot(region=region)
-       
-        frame_pil = self.capture_output.to_pil(frame) 
+
+        frame_pil = self.capture_output.to_pil(frame)
         frame_pil.save(file_path)
 
         return file_path
@@ -117,7 +116,7 @@ class D3DShot:
         directory = self._validate_directory(directory)
 
         for i, frame in enumerate(self.frame_buffer):
-            frame_pil = self.capture_output.to_pil(frame) 
+            frame_pil = self.capture_output.to_pil(frame)
             frame_pil.save(f"{directory}/{i + 1}.png")
 
     def capture(self, target_fps=60, region=None):
@@ -128,7 +127,9 @@ class D3DShot:
 
         self._is_capturing = True
 
-        self._capture_thread = threading.Thread(target=self._capture, args=(target_fps, region))
+        self._capture_thread = threading.Thread(
+            target=self._capture, args=(target_fps, region)
+        )
         self._capture_thread.start()
 
         return True
@@ -141,7 +142,9 @@ class D3DShot:
 
         self._is_capturing = True
 
-        self._capture_thread = threading.Thread(target=self._screenshot_every, args=(interval, region))
+        self._capture_thread = threading.Thread(
+            target=self._screenshot_every, args=(interval, region)
+        )
         self._capture_thread.start()
 
         return True
@@ -155,7 +158,9 @@ class D3DShot:
 
         self._is_capturing = True
 
-        self._capture_thread = threading.Thread(target=self._screenshot_to_disk_every, args=(interval, directory, region))
+        self._capture_thread = threading.Thread(
+            target=self._screenshot_to_disk_every, args=(interval, directory, region)
+        )
         self._capture_thread.start()
 
         return True
@@ -266,7 +271,9 @@ class D3DShot:
             interval = float(interval)
 
         if not isinstance(interval, float) or interval < 1.0:
-            raise AttributeError("'interval' should be one of (int, float) and be >= 1.0")
+            raise AttributeError(
+                "'interval' should be one of (int, float) and be >= 1.0"
+            )
 
         return interval
 
@@ -279,16 +286,15 @@ class D3DShot:
             cycle_start = time.time()
 
             frame = self.display.capture(
-                self.capture_output.process, 
-                region=self._validate_region(region)
+                self.capture_output.process, region=self._validate_region(region)
             )
-       
+
             if frame is not None:
                 self.frame_buffer.appendleft(frame)
             else:
                 if len(self.frame_buffer):
                     self.frame_buffer.appendleft(self.frame_buffer[0])
-     
+
             gc.collect()
 
             cycle_end = time.time()
@@ -299,7 +305,6 @@ class D3DShot:
                 time.sleep(frame_time_left)
 
         self._is_capturing = False
-    
 
     def _screenshot_every(self, interval, region):
         self._reset_frame_buffer()
@@ -309,7 +314,7 @@ class D3DShot:
 
             frame = self.screenshot(region=self._validate_region(region))
             self.frame_buffer.appendleft(frame)
-       
+
             cycle_end = time.time()
 
             time_left = interval - (cycle_end - cycle_start)
@@ -323,8 +328,10 @@ class D3DShot:
         while self.is_capturing:
             cycle_start = time.time()
 
-            self.screenshot_to_disk(directory=directory, region=self._validate_region(region))
-       
+            self.screenshot_to_disk(
+                directory=directory, region=self._validate_region(region)
+            )
+
             cycle_end = time.time()
 
             time_left = interval - (cycle_end - cycle_start)

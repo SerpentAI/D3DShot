@@ -9,10 +9,9 @@ from d3dshot.capture_output import CaptureOutput
 
 
 class PytorchGPUCaptureOutput(CaptureOutput):
-    
     def __init__(self):
         self.device = torch.device("cuda")
-        torch.tensor([0], device=self.device) # Warm up CUDA
+        torch.tensor([0], device=self.device)  # Warm up CUDA
 
     def process(self, pointer, size, width, height, region, rotation):
         # We proxy through numpy's ctypes interface because making
@@ -36,7 +35,7 @@ class PytorchGPUCaptureOutput(CaptureOutput):
         image = torch.from_numpy(image).to(self.device)
 
         if region[2] - region[0] != width or region[3] - region[1] != height:
-            image = image[region[1]:region[3], region[0]:region[2], :]
+            image = image[region[1] : region[3], region[0] : region[2], :]
 
         return image
 

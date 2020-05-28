@@ -6,7 +6,6 @@ from d3dshot.capture_output import CaptureOutput
 
 
 class PILCaptureOutput(CaptureOutput):
-
     def __init__(self):
         pass
 
@@ -24,7 +23,7 @@ class PILCaptureOutput(CaptureOutput):
         elif rotation == 270:
             image = Image.frombytes("RGBA", (height, width), raw_bytes)
             image = image.transpose(Image.ROTATE_90)
-        
+
         b, g, r, _ = image.split()
         image = Image.merge("RGB", (r, g, b))
 

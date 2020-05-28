@@ -1,4 +1,3 @@
-import importlib
 import importlib.util
 
 from d3dshot.d3dshot import D3DShot
@@ -7,11 +6,16 @@ from d3dshot.capture_output import CaptureOutputs
 
 pil_is_available = importlib.util.find_spec("PIL") is not None
 numpy_is_available = importlib.util.find_spec("numpy") is not None
-pytorch_is_available = importlib.util.find_spec("torch") is not None and numpy_is_available
+
+pytorch_is_available = (
+    importlib.util.find_spec("torch") is not None and numpy_is_available
+)
+
 pytorch_gpu_is_available = False
 
 if pytorch_is_available:
     import torch
+
     pytorch_gpu_is_available = torch.cuda.is_available()
 
 
@@ -22,7 +26,7 @@ capture_output_mapping = {
     "pytorch": CaptureOutputs.PYTORCH,
     "pytorch_float": CaptureOutputs.PYTORCH_FLOAT,
     "pytorch_gpu": CaptureOutputs.PYTORCH_GPU,
-    "pytorch_float_gpu": CaptureOutputs.PYTORCH_FLOAT_GPU
+    "pytorch_float_gpu": CaptureOutputs.PYTORCH_FLOAT_GPU,
 }
 
 capture_outputs = [
@@ -32,7 +36,7 @@ capture_outputs = [
     "pytorch",
     "pytorch_float",
     "pytorch_gpu",
-    "pytorch_float_gpu"
+    "pytorch_float_gpu",
 ]
 
 
@@ -62,12 +66,12 @@ def create(capture_output="pil", frame_buffer_size=60):
     frame_buffer_size = _validate_frame_buffer_size(frame_buffer_size)
 
     d3dshot = D3DShot(
-        capture_output=capture_output, 
+        capture_output=capture_output,
         frame_buffer_size=frame_buffer_size,
         pil_is_available=pil_is_available,
         numpy_is_available=numpy_is_available,
         pytorch_is_available=pytorch_is_available,
-        pytorch_gpu_is_available=pytorch_gpu_is_available
+        pytorch_gpu_is_available=pytorch_gpu_is_available,
     )
 
     return d3dshot
@@ -80,8 +84,12 @@ def _validate_capture_output(capture_output):
     capture_output = capture_output_mapping.get(capture_output)
 
     if capture_output not in available_capture_outputs:
-        available_capture_outputs = [capture_outputs[co.value] for co in available_capture_outputs]
-        raise AttributeError(f"Invalid Capture Output '{capture_output_name}'. Available Options: {', '.join(available_capture_outputs)}")
+        available_capture_outputs = [
+            capture_outputs[co.value] for co in available_capture_outputs
+        ]
+        raise AttributeError(
+            f"Invalid Capture Output '{capture_output_name}'. Available Options: {', '.join(available_capture_outputs)}"
+        )
 
     return capture_output
 

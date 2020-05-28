@@ -8,7 +8,6 @@ from d3dshot.capture_output import CaptureOutput
 
 
 class NumpyCaptureOutput(CaptureOutput):
-
     def __init__(self):
         pass
 
@@ -29,7 +28,7 @@ class NumpyCaptureOutput(CaptureOutput):
             image = np.rot90(image, axes=(0, 1))
 
         if region[2] - region[0] != width or region[3] - region[1] != height:
-            image = image[region[1]:region[3], region[0]:region[2], :]
+            image = image[region[1] : region[3], region[0] : region[2], :]
 
         return image
 
