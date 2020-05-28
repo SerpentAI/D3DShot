@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "D3DShot"
-version = "0.1.4"
+version = "0.1.5"
 description = "Extremely Fast and Robust Screen Capture on Windows with the Desktop Duplication API"
 readme = "README.md"
 authors = ["Nicholas Brochu <nicholas@serpent.ai>"]
 license = "MIT"
-repository = "https://github.com/SerpentAI/SerpentAI"
+repository = "https://github.com/SerpentAI/D3DShot"
 keywords = ["Screen Capture", "Screenshot", "Computer Vision", "Windows"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
