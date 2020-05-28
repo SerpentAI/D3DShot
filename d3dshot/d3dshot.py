@@ -170,7 +170,10 @@ class D3DShot:
             return False
 
         self._is_capturing = False
-        self._capture_thread = None
+
+        if self._capture_thread is not None:
+            self._capture_thread.join(timeout=1)
+            self._capture_thread = None
 
         return True
 
