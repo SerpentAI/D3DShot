@@ -1,11 +1,14 @@
 .vscode
+.idea
 
 __pycache__/
 *.py[cod]
 
-.python-version
+.venv
 
 *.egg-info
 
 build/
 dist/
+
+poetry.lock
