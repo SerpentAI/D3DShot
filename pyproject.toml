@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "D3DShot"
+version = "0.1.4"
+description = "Extremely Fast and Robust Screen Capture on Windows with the Desktop Duplication API"
+readme = "README.md"
+authors = ["Nicholas Brochu <nicholas@serpent.ai>"]
+license = "MIT"
+repository = "https://github.com/SerpentAI/SerpentAI"
+keywords = ["Screen Capture", "Screenshot", "Computer Vision", "Windows"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: Microsoft :: Windows :: Windows 8.1",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Graphics :: Capture",
+    "Topic :: Multimedia :: Graphics :: Capture :: Screen Capture"
+]
+packages = [
+    {include = "d3dshot"},
+]
+include = []
+
+[tool.poetry.dependencies]
+python = ">=3.6"
+
+comtypes = "~1.1.7"
+pillow = "~7.1.2"
+
+[tool.poetry.dev-dependencies]
+ipython = "~7.14"
+notebook = "~6.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
