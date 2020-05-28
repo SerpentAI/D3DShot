@@ -115,7 +115,8 @@ class D3DShot:
     def frame_buffer_to_disk(self, directory=None):
         directory = self._validate_directory(directory)
 
-        for i, frame in enumerate(self.frame_buffer):
+        # tuple cast to ensure an immutable frame buffer
+        for i, frame in enumerate(tuple(self.frame_buffer)):
             frame_pil = self.capture_output.to_pil(frame)
             frame_pil.save(f"{directory}/{i + 1}.png")
 
