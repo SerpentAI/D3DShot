@@ -36,6 +36,9 @@ pillow = "~7.1.2"
 ipython = "~7.14"
 notebook = "~6.0"
 
+[tool.black]
+line-length = 99
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"

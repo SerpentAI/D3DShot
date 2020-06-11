@@ -9,7 +9,21 @@ from d3dshot.display import Display
 from d3dshot.capture_output import CaptureOutput, CaptureOutputs
 
 
-class D3DShot:
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        else:
+            print(
+                f"Only 1 instance of {cls.__name__} is allowed per process! Returning the existing instance..."
+            )
+
+        return cls._instances[cls]
+
+
+class D3DShot(metaclass=Singleton):
     def __init__(
         self,
         capture_output=CaptureOutputs.PIL,
@@ -128,9 +142,7 @@ class D3DShot:
 
         self._is_capturing = True
 
-        self._capture_thread = threading.Thread(
-            target=self._capture, args=(target_fps, region)
-        )
+        self._capture_thread = threading.Thread(target=self._capture, args=(target_fps, region))
         self._capture_thread.start()
 
         return True
@@ -275,9 +287,7 @@ class D3DShot:
             interval = float(interval)
 
         if not isinstance(interval, float) or interval < 1.0:
-            raise AttributeError(
-                "'interval' should be one of (int, float) and be >= 1.0"
-            )
+            raise AttributeError("'interval' should be one of (int, float) and be >= 1.0")
 
         return interval
 
@@ -332,9 +342,7 @@ class D3DShot:
         while self.is_capturing:
             cycle_start = time.time()
 
-            self.screenshot_to_disk(
-                directory=directory, region=self._validate_region(region)
-            )
+            self.screenshot_to_disk(directory=directory, region=self._validate_region(region))
 
             cycle_end = time.time()
 
