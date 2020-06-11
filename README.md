@@ -104,6 +104,10 @@ _D3DShot_ leverages DLLs that are already available on your system so the depend
 
 These dependencies will automatically be installed alongside _D3DShot_; No need to worry about them!
 
+##### Extra Step: Laptop Users
+
+Windows has a quirk when using Desktop Duplication on hybrid-GPU systems. Please see the [wiki article](https://github.com/SerpentAI/D3DShot/wiki/Installation-Note:-Laptops) before attempting to use _D3DShot_ on your system.
+
 ## Concepts
 
 ### Capture Outputs
