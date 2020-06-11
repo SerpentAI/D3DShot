@@ -151,6 +151,26 @@ d = d3dshot.create(capture_output="pytorch_float_gpu")
 
 Trying to use a Capture Output for which your environment does not meet the requirements will result in an error.
 
+### Singleton
+
+Windows only allows 1 instance of Desktop Duplication per process. To make sure we fall in line with that limitation to avoid issues, the _D3DShot_ class acts as a singleton. Any subsequent calls to `d3dshot.create()` will always return the existing instance.
+
+```python
+d = d3dshot.create(capture_output="numpy")
+
+# Attempting to create a second instance
+d2 = d3dshot.create(capture_output="pil")
+# Only 1 instance of D3DShot is allowed per process! Returning the existing instance...
+
+# Capture output remains 'numpy'
+d2.capture_output.backend
+# Out[1]: <d3dshot.capture_outputs.numpy_capture_output.NumpyCaptureOutput at 0x2672be3b8e0>
+
+d == d2
+# Out[2]: True
+```  
+
+
 ### Frame Buffer
 
 When you create a _D3DShot_ instance, a frame buffer is also initialized. It is meant as a thread-safe, first-in, first-out way to hold a certain quantity of captures and is implemented as a `collections.deque`.
