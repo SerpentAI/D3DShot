@@ -124,9 +124,7 @@ class IDXGIOutputDuplication(IDXGIObject):
 class IDXGIOutput(IDXGIObject):
     _iid_ = comtypes.GUID("{ae02eedb-c735-4690-8d52-5a8dc20213aa}")
     _methods_ = [
-        comtypes.STDMETHOD(
-            comtypes.HRESULT, "GetDesc", [ctypes.POINTER(DXGI_OUTPUT_DESC)]
-        ),
+        comtypes.STDMETHOD(comtypes.HRESULT, "GetDesc", [ctypes.POINTER(DXGI_OUTPUT_DESC)]),
         comtypes.STDMETHOD(comtypes.HRESULT, "GetDisplayModeList"),
         comtypes.STDMETHOD(comtypes.HRESULT, "FindClosestMatchingMode"),
         comtypes.STDMETHOD(comtypes.HRESULT, "WaitForVBlank"),
@@ -174,9 +172,7 @@ class IDXGIAdapter(IDXGIObject):
 class IDXGIAdapter1(IDXGIAdapter):
     _iid_ = comtypes.GUID("{29038f61-3839-4626-91fd-086879011a05}")
     _methods_ = [
-        comtypes.STDMETHOD(
-            comtypes.HRESULT, "GetDesc1", [ctypes.POINTER(DXGI_ADAPTER_DESC1)]
-        ),
+        comtypes.STDMETHOD(comtypes.HRESULT, "GetDesc1", [ctypes.POINTER(DXGI_ADAPTER_DESC1)]),
     ]
 
 
@@ -303,18 +299,14 @@ def get_dxgi_output_duplication_frame(
     dxgi_resource = ctypes.POINTER(IDXGIResource)()
 
     dxgi_output_duplication.AcquireNextFrame(
-        0,
-        ctypes.byref(dxgi_output_duplication_frame_information),
-        ctypes.byref(dxgi_resource),
+        0, ctypes.byref(dxgi_output_duplication_frame_information), ctypes.byref(dxgi_resource),
     )
 
     frame = None
 
     if dxgi_output_duplication_frame_information.LastPresentTime > 0:
         id3d11_texture_2d = dxgi_resource.QueryInterface(ID3D11Texture2D)
-        id3d11_texture_2d_cpu = prepare_d3d11_texture_2d_for_cpu(
-            id3d11_texture_2d, d3d_device
-        )
+        id3d11_texture_2d_cpu = prepare_d3d11_texture_2d_for_cpu(id3d11_texture_2d, d3d_device)
 
         d3d_device_context = ctypes.POINTER(ID3D11DeviceContext)()
         d3d_device.GetImmediateContext(ctypes.byref(d3d_device_context))
@@ -327,9 +319,14 @@ def get_dxgi_output_duplication_frame(
         id3d11_surface.Map(ctypes.byref(dxgi_mapped_rect), 1)
 
         pointer = dxgi_mapped_rect.pBits
-        size = width * height * 4
+        pitch = int(dxgi_mapped_rect.Pitch)
 
-        frame = process_func(pointer, size, width, height, region, rotation)
+        if rotation in (0, 180):
+            size = pitch * height
+        else:
+            size = pitch * width
+
+        frame = process_func(pointer, pitch, size, width, height, region, rotation)
 
         id3d11_surface.Unmap()
 

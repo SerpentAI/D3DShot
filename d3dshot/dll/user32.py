@@ -21,9 +21,7 @@ def get_display_device_name_mapping():
         display_device = DISPLAY_DEVICE()
         display_device.cb = ctypes.sizeof(display_device)
 
-        if not ctypes.windll.user32.EnumDisplayDevicesW(
-            None, i, ctypes.byref(display_device), 0
-        ):
+        if not ctypes.windll.user32.EnumDisplayDevicesW(None, i, ctypes.byref(display_device), 0):
             break
 
         if display_device.StateFlags > 0:

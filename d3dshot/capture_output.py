@@ -19,8 +19,8 @@ class CaptureOutput:
     def __init__(self, backend=CaptureOutputs.PIL):
         self.backend = self._initialize_backend(backend)
 
-    def process(self, pointer, size, width, height, region, rotation):
-        return self.backend.process(pointer, size, width, height, region, rotation)
+    def process(self, pointer, pitch, size, width, height, region, rotation):
+        return self.backend.process(pointer, pitch, size, width, height, region, rotation)
 
     def to_pil(self, frame):
         return self.backend.to_pil(frame)
@@ -38,15 +38,11 @@ class CaptureOutput:
 
             return NumpyCaptureOutput()
         elif backend == CaptureOutputs.NUMPY_FLOAT:
-            from d3dshot.capture_outputs.numpy_float_capture_output import (
-                NumpyFloatCaptureOutput,
-            )
+            from d3dshot.capture_outputs.numpy_float_capture_output import NumpyFloatCaptureOutput
 
             return NumpyFloatCaptureOutput()
         elif backend == CaptureOutputs.PYTORCH:
-            from d3dshot.capture_outputs.pytorch_capture_output import (
-                PytorchCaptureOutput,
-            )
+            from d3dshot.capture_outputs.pytorch_capture_output import PytorchCaptureOutput
 
             return PytorchCaptureOutput()
         elif backend == CaptureOutputs.PYTORCH_FLOAT:
@@ -56,9 +52,7 @@ class CaptureOutput:
 
             return PytorchFloatCaptureOutput()
         elif backend == CaptureOutputs.PYTORCH_GPU:
-            from d3dshot.capture_outputs.pytorch_gpu_capture_output import (
-                PytorchGPUCaptureOutput,
-            )
+            from d3dshot.capture_outputs.pytorch_gpu_capture_output import PytorchGPUCaptureOutput
 
             return PytorchGPUCaptureOutput()
         elif backend == CaptureOutputs.PYTORCH_FLOAT_GPU:

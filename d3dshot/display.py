@@ -61,10 +61,9 @@ class Display:
         return frame
 
     def _initialize_dxgi_output_duplication(self):
-        (
-            self.d3d_device,
-            self.d3d_device_context,
-        ) = d3dshot.dll.d3d.initialize_d3d_device(self.dxgi_adapter)
+        (self.d3d_device, self.d3d_device_context,) = d3dshot.dll.d3d.initialize_d3d_device(
+            self.dxgi_adapter
+        )
 
         return d3dshot.dll.dxgi.initialize_dxgi_output_duplication(
             self.dxgi_output, self.d3d_device
@@ -76,30 +75,20 @@ class Display:
 
         clean_region = list()
 
+        clean_region.append(0 if region[0] < 0 or region[0] > self.resolution[0] else region[0])
+        clean_region.append(0 if region[1] < 0 or region[1] > self.resolution[1] else region[1])
         clean_region.append(
-            0 if region[0] < 0 or region[0] > self.resolution[0] else region[0]
+            self.resolution[0] if region[2] < 0 or region[2] > self.resolution[0] else region[2]
         )
         clean_region.append(
-            0 if region[1] < 0 or region[1] > self.resolution[1] else region[1]
-        )
-        clean_region.append(
-            self.resolution[0]
-            if region[2] < 0 or region[2] > self.resolution[0]
-            else region[2]
-        )
-        clean_region.append(
-            self.resolution[1]
-            if region[3] < 0 or region[3] > self.resolution[1]
-            else region[3]
+            self.resolution[1] if region[3] < 0 or region[3] > self.resolution[1] else region[3]
         )
 
         return tuple(clean_region)
 
     @classmethod
     def discover_displays(cls):
-        display_device_name_mapping = (
-            d3dshot.dll.user32.get_display_device_name_mapping()
-        )
+        display_device_name_mapping = d3dshot.dll.user32.get_display_device_name_mapping()
 
         dxgi_factory = d3dshot.dll.dxgi.initialize_dxgi_factory()
         dxgi_adapters = d3dshot.dll.dxgi.discover_dxgi_adapters(dxgi_factory)
@@ -107,14 +96,10 @@ class Display:
         displays = list()
 
         for dxgi_adapter in dxgi_adapters:
-            dxgi_adapter_description = d3dshot.dll.dxgi.describe_dxgi_adapter(
-                dxgi_adapter
-            )
+            dxgi_adapter_description = d3dshot.dll.dxgi.describe_dxgi_adapter(dxgi_adapter)
 
             for dxgi_output in d3dshot.dll.dxgi.discover_dxgi_outputs(dxgi_adapter):
-                dxgi_output_description = d3dshot.dll.dxgi.describe_dxgi_output(
-                    dxgi_output
-                )
+                dxgi_output_description = d3dshot.dll.dxgi.describe_dxgi_output(dxgi_output)
 
                 if dxgi_output_description["is_attached_to_desktop"]:
                     display_device = display_device_name_mapping.get(
@@ -129,9 +114,7 @@ class Display:
                         dxgi_output_description["position"]["top"],
                     )
 
-                    scale_factor = d3dshot.dll.shcore.get_scale_factor_for_monitor(
-                        hmonitor
-                    )
+                    scale_factor = d3dshot.dll.shcore.get_scale_factor_for_monitor(hmonitor)
 
                     display = cls(
                         name=display_device[0],
